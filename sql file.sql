@@ -160,7 +160,7 @@ select table1.channel,
 from table1
 join table2 
 order by gross_sales_Mn desc;                                                                  
-                                                                                                                                                          -- ________________________________________________________________________________________________________________________________    
+      
 -- ____________________________________________________________________________________________________________
 
 -- 10. Top 3 products in each division that have a high total_sold_quantity in the fiscal_year 2021:
@@ -168,15 +168,15 @@ order by gross_sales_Mn desc;
 																																						
 with rank_table as (
 		with product_table as (select p.product_code,
-									division,
-                                    concat(product,' ',variant) as products,
-									SUM(sm.sold_quantity) as total_sold_quantity
-								from dim_product as p
-                                join fact_sales_monthly as sm
-                                 on p.product_code=sm.product_code
-                                 where sm.fiscal_year=2021
-                                 group by division, product_code, products
-                                 order by total_sold_quantity desc)                                 
+					       division,
+                                               concat(product,' ',variant) as products,
+					       SUM(sm.sold_quantity) as total_sold_quantity
+				       from dim_product as p
+                             	   join fact_sales_monthly as sm
+                             	    on p.product_code=sm.product_code
+				   where sm.fiscal_year=2021
+                             	   group by division, product_code, products
+                              	   order by total_sold_quantity desc)                                 
 			select    *,    
 				      rank()  over ( partition by division 
                       order by total_sold_quantity desc) as ranks
